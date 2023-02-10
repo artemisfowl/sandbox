@@ -3,15 +3,12 @@
 	@date Fri, 10 Feb 2023 08:49:37 +0530
 '''
 
+# standard lib imports
 from abc import abstractmethod
 
 class State:
 	def __init__(self) -> None:
 		self._options = None
-
-	@abstractmethod
-	def handle_events(self):
-		pass
 
 class GameState(State):
 	def __init__(self) -> None:
