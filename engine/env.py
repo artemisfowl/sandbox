@@ -80,12 +80,16 @@ class Environment:
 		for resolution in game_lib.display.list_modes():
 			self._logger.debug(f"{resolution}")
 
+	def set_state(self, cstate):
+		self._state = cstate
+
 	def mainloop(self) -> None:
 		self._logger.info("Starting main loop")
 		# note: do not add loggers here which may result in spamming of the logging capacity
 		while self.__run__:
 			self.__handle_events__()
 			if isinstance(self._state, MenuState):
+				# fixme: the following loggers are spamming the logger, remove them
 				self._logger.debug("Handle menu state events")
 			elif isinstance(self._state, GameState):
 				self._logger.debug("Handle game state events")
