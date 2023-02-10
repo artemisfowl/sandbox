@@ -15,12 +15,15 @@ from logging import getLogger, DEBUG
 
 from utility.log import log_setup
 from utility.constants import LOGGER_INSTANCE
+from .state import GameState, MenuState
 
 class Environment:
 	def __init__(self, enable_debug=False) -> None:
 		self.__run__ = True
 		self.__surface__ = None
 		self._logger = None
+
+		self._state = None
 
 		if enable_debug:
 			log_setup(log_level=DEBUG)
@@ -37,6 +40,9 @@ class Environment:
 					 f"{self.__surface__.get_width()}x{self.__surface__.get_height()}")
 		game_lib.display.set_caption("Game Window Test")
 		self._logger.debug(f"Setting window caption to : Game Window Test")
+
+		self._logger.info("Setting the state initially to MenuState")
+		self._state = MenuState()
 
 		self._logger.debug("Returning a reference to object")
 		return self
@@ -79,4 +85,8 @@ class Environment:
 		# note: do not add loggers here which may result in spamming of the logging capacity
 		while self.__run__:
 			self.__handle_events__()
+			if isinstance(self._state, MenuState):
+				self._logger.debug("Handle menu state events")
+			elif isinstance(self._state, GameState):
+				self._logger.debug("Handle game state events")
 			self.__update__()
