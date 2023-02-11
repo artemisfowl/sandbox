@@ -14,7 +14,6 @@ class GameMenuState(MenuState):
 		self._logger.info("Initialised GameMenuState")
 
 	# note: do not add logger lines here which will spam the logger
-	# fixme: return proper int value in order to switch states
 	def handle_events(self, event) -> int:
 		if event.key == game_lib.K_RETURN:
 			self._logger.info("Enter/return key pressed, moving to game play state")
