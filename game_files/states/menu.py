@@ -3,15 +3,27 @@
 	@date Sat, 11 Feb 2023 04:52:36 +0530
 '''
 
+# standard lib imports
+from enum import Enum
+
 # custom lib imports
 from engine import logger, game_lib, SwitchTo
 from engine.state import MenuState
+
+class GameMenuOptions(Enum):
+	_continue = 1
+	_new_game = 2
+	_options = 3
+	_quit_game = 4
 
 class GameMenuState(MenuState):
 	def __init__(self) -> None:
 		super().__init__()
 		self._logger = logger
+		self._options = {option.name: option.value for option in GameMenuOptions}
+
 		self._logger.info("Initialised GameMenuState")
+		self._logger.debug(f"Populated options : {self._options}")
 
 	# note: do not add logger lines here which will spam the logger
 	def handle_events(self, event) -> int:

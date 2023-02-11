@@ -98,7 +98,6 @@ class Environment:
 				self._logger.debug(f"Keydown event details : {event}")
 				self._logger.debug(f"Current state : {type(self._state)}")
 
-				# commented block
 				r = self._state.handle_events(event=event)
 				if r == SwitchTo.GAME.value:
 					self._logger.info("Switching to GameState instance")

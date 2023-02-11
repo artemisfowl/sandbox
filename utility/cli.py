@@ -16,6 +16,8 @@ def cli_util_parse_args() -> dict:
 
 	# optional arguments
 	parser.add_argument("--debug", "-d", help="Enable debug mode", action="store_true", required=False)
+	# fixme: change the code in environment to handle putting out the logs in a file as and when required
+	parser.add_argument("--debug-with-file", "-dwf", help="Enable debug mode", action="store_true", required=False)
 
 	# parse the arguments
 	args = parser.parse_args()
