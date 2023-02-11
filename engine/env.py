@@ -14,21 +14,26 @@ from pygame.locals import QUIT
 from logging import getLogger, DEBUG
 
 from utility.log import log_setup
-from utility.constants import LOGGER_INSTANCE
+from utility.constants import LOGGER_INSTANCE, SwitchTo
 from .state import GameState, MenuState
 
 class Environment:
-	def __init__(self, enable_debug=False) -> None:
+	def __init__(self, states: list, enable_debug=False) -> None:
 		self.__run__ = True
 		self.__surface__ = None
 		self._logger = None
-
-		self._state = None
 
 		if enable_debug:
 			log_setup(log_level=DEBUG)
 		self._logger = getLogger(LOGGER_INSTANCE)
 		self._logger.info("Initializing environment")
+
+		if states is None or len(states) < 2:
+			self._logger.error("Menu and Game states are not provided, exiting run")
+			exit(-1)
+
+		self._state_stack = states if isinstance(states, list) else []
+		self._state = self._state_stack.pop(0) if len(self._state_stack) > 0 else None
 
 	# basic context handler function
 	def __enter__(self):
@@ -80,17 +85,32 @@ class Environment:
 		for resolution in game_lib.display.list_modes():
 			self._logger.debug(f"{resolution}")
 
-	def set_state(self, cstate):
-		self._state = cstate
+	def update_cur_state(self):
+		self._logger.debug(f"Current state instance of (before stack push) : {type(self._state)}")
+		self._logger.debug(f"Before pushing back in stack : {self._state_stack}")
+		self._state_stack.append(self._state) # push at the back
+		self._logger.debug(f"After pushing back in stack : {self._state_stack}")
+		self._state = self._state_stack.pop(0) # pop from the top
+		self._logger.debug(f"Current state instance of (after stack pop) : {type(self._state)}")
 
 	def mainloop(self) -> None:
 		self._logger.info("Starting main loop")
+		self._logger.debug(f"Current state instance : {type(self._state)}")
 		# note: do not add loggers here which may result in spamming of the logging capacity
 		while self.__run__:
 			self.__handle_events__()
+			should_switch = False # by default it should not switch
 			if isinstance(self._state, MenuState):
-				# fixme: the following loggers are spamming the logger, remove them
-				self._logger.debug("Handle menu state events")
+				r = self._state.handle_events()
+				if r == SwitchTo.GAME.value:
+					should_switch = True
 			elif isinstance(self._state, GameState):
-				self._logger.debug("Handle game state events")
+				r = self._state.handle_events()
+				if r == SwitchTo.MENU.value:
+					should_switch = True
+
+			if should_switch:
+				self._logger.info("About to switch the current state")
+				self.update_cur_state()
+				should_switch = False
 			self.__update__()

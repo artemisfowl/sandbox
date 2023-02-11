@@ -4,8 +4,13 @@
 '''
 
 from os import sep
+from enum import Enum
 
 LOGGER_INSTANCE = "albatross"
 LOGGER_DIR = f".{sep}logs{sep}"
 LOGGER_FILE = f".{sep}exec.log"
 LOGGER_FORMAT = '[%(levelname)-7s] - %(asctime)s - %(name)s {%(filename)s:%(funcName)s:%(lineno)d} - %(message)s'
+
+class SwitchTo(Enum):
+	MENU=1
+	GAME=2

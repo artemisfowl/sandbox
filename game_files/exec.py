@@ -5,11 +5,13 @@ from sys import path
 path.append("..")
 
 # custom lib/module imports
-from utility.cli import cli_util_parse_args
-from engine.env import Environment
+import engine
+from states.menu import GameMenuState
+from states.game import GamePlayState
 
 def main() -> None:
-	with Environment(enable_debug=cli_util_parse_args()["debug"]) as environment:
+	with engine.Environment(
+			states=[GameMenuState(), GamePlayState()], enable_debug=engine.cli_args["debug"]) as environment:
 		environment.mainloop()
 
 if __name__ == "__main__":
