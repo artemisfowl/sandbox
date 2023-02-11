@@ -14,3 +14,7 @@ LOGGER_FORMAT = '[%(levelname)-7s] - %(asctime)s - %(name)s {%(filename)s:%(func
 class SwitchTo(Enum):
 	MENU=1
 	GAME=2
+
+class StateName:
+	game_play_state = "GAME"
+	game_menu_state = "MENU"

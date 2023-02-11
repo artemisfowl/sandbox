@@ -15,11 +15,8 @@ class GameMenuState(MenuState):
 
 	# note: do not add logger lines here which will spam the logger
 	# fixme: return proper int value in order to switch states
-	def handle_events(self) -> int:
-		# fixme: add the menu state event handling below
-		for event in game_lib.event.get():
-			# fixme: this is not working as expected
-			if event.type == game_lib.K_RETURN:
-				self._logger.info("Received ENTER/RETURN key event, switching to GamePlayState")
-				return SwitchTo.GAME.value
+	def handle_events(self, event) -> int:
+		if event.key == game_lib.K_RETURN:
+			self._logger.info("Enter/return key pressed, moving to game play state")
+			return SwitchTo.GAME.value
 		return 0

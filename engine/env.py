@@ -6,6 +6,8 @@
 # standard imports
 from os import environ
 from sys import exit
+
+from engine.state import GameState, MenuState
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 # game lib import
@@ -14,8 +16,7 @@ from pygame.locals import QUIT
 from logging import getLogger, DEBUG
 
 from utility.log import log_setup
-from utility.constants import LOGGER_INSTANCE, SwitchTo
-from .state import GameState, MenuState
+from utility.constants import LOGGER_INSTANCE#, SwitchTo
 
 class Environment:
 	def __init__(self, states: list, enable_debug=False) -> None:
@@ -33,7 +34,7 @@ class Environment:
 			exit(-1)
 
 		self._state_stack = states if isinstance(states, list) else []
-		self._state = self._state_stack.pop(0) if len(self._state_stack) > 0 else None
+		self._state = None
 
 	# basic context handler function
 	def __enter__(self):
@@ -46,8 +47,9 @@ class Environment:
 		game_lib.display.set_caption("Game Window Test")
 		self._logger.debug(f"Setting window caption to : Game Window Test")
 
-		self._logger.info("Setting the state initially to MenuState")
-		self._state = MenuState()
+		self._logger.info("Setting the state initially to MenuState instance")
+		if self._state is None:
+			self._state = [state for state in self._state_stack if isinstance(state, MenuState)][-1]
 
 		self._logger.debug("Returning a reference to object")
 		return self
@@ -74,10 +76,26 @@ class Environment:
 
 	# note: do not add loggers here which may result in spamming of the logging capacity
 	def __handle_events__(self) -> None:
+		#should_switch = False
 		for event in game_lib.event.get():
 			if event.type == QUIT:
 				self._logger.debug(f"Quit event received, setting run to False")
 				self.__run__ = False
+			# for some reason the code is not going inside this at all
+			elif event.type == game_lib.KEYDOWN:
+				self._logger.debug(f"Keydown event details : {event}")
+				self._logger.debug(f"Current state : {type(self._state)}")
+
+				'''
+				# commented block
+				r = self._state.handle_events(event=event)
+				if r == SwitchTo.GAME.value or r == SwitchTo.MENU.value:
+					should_switch = True
+				if should_switch:
+					self._logger.info("About to switch the current state")
+					self.update_cur_state()
+					should_switch = False
+				'''
 
 	# fixme: add public functions as and when required
 	def listresolutions(self):
@@ -99,18 +117,4 @@ class Environment:
 		# note: do not add loggers here which may result in spamming of the logging capacity
 		while self.__run__:
 			self.__handle_events__()
-			should_switch = False # by default it should not switch
-			if isinstance(self._state, MenuState):
-				r = self._state.handle_events()
-				if r == SwitchTo.GAME.value:
-					should_switch = True
-			elif isinstance(self._state, GameState):
-				r = self._state.handle_events()
-				if r == SwitchTo.MENU.value:
-					should_switch = True
-
-			if should_switch:
-				self._logger.info("About to switch the current state")
-				self.update_cur_state()
-				should_switch = False
 			self.__update__()

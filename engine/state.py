@@ -15,7 +15,7 @@ class GameState(State):
 		super().__init__()
 
 	@abstractmethod
-	def handle_events(self):
+	def handle_events(self, event):
 		pass
 
 class MenuState(State):
@@ -23,6 +23,6 @@ class MenuState(State):
 		super().__init__()
 
 	@abstractmethod
-	def handle_events(self):
+	def handle_events(self, event):
 		pass
 

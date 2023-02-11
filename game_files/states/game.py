@@ -5,6 +5,7 @@
 
 from engine import logger, game_lib
 from engine.state import GameState
+from utility.constants import SwitchTo
 
 class GamePlayState(GameState):
 	def __init__(self) -> None:
@@ -14,9 +15,9 @@ class GamePlayState(GameState):
 
 	# note: do not add logger lines here which will spam the logger
 	# fixme: return proper int value in order to switch game state
-	def handle_events(self) -> int:
+	def handle_events(self, event) -> int:
 		# fixme: add the game state event handling below
-		for event in game_lib.event.get():
-			if event.type == game_lib.K_ESCAPE:
-				self._logger.debug("Received ESCAPE key event, switching to GameMenuState")
+		if event.code == game_lib.K_ESCAPE:
+			self._logger.info("Escape key pressed, moving to menu state")
+			return SwitchTo.MENU.value
 		return 0
