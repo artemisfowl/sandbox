@@ -17,7 +17,7 @@ class GamePlayState(GameState):
 	# fixme: return proper int value in order to switch game state
 	def handle_events(self, event) -> int:
 		# fixme: add the game state event handling below
-		if event.code == game_lib.K_ESCAPE:
+		if event.key == game_lib.K_ESCAPE:
 			self._logger.info("Escape key pressed, moving to menu state")
 			return SwitchTo.MENU.value
 		return 0

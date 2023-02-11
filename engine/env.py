@@ -16,7 +16,7 @@ from pygame.locals import QUIT
 from logging import getLogger, DEBUG
 
 from utility.log import log_setup
-from utility.constants import LOGGER_INSTANCE#, SwitchTo
+from utility.constants import LOGGER_INSTANCE, SwitchTo
 
 class Environment:
 	def __init__(self, states: list, enable_debug=False) -> None:
@@ -48,8 +48,7 @@ class Environment:
 		self._logger.debug(f"Setting window caption to : Game Window Test")
 
 		self._logger.info("Setting the state initially to MenuState instance")
-		if self._state is None:
-			self._state = [state for state in self._state_stack if isinstance(state, MenuState)][-1]
+		self._state = self.__select_state__(state_type=MenuState)
 
 		self._logger.debug("Returning a reference to object")
 		return self
@@ -60,6 +59,9 @@ class Environment:
 		# fixme: Keeping these in order to remove the warnings away
 		self._logger.debug(f"Non-keyword arguments : {args}")
 		self._logger.debug(f"Keyword arguments : {kwargs}")
+
+		# fixme: provide the information in the logs about the error that occurred
+		#self._logger.error(msg="Error occurred", *args)
 
 		self._logger.debug("Cleaning up")
 		self.__cleanup__()
@@ -74,9 +76,19 @@ class Environment:
 	def __update__(self):
 		game_lib.display.update()
 
+	def __select_state__(self, state_type, store_state=None):
+		self._logger.info("About to search for state of the desired type")
+		self._logger.debug(f"Desired state type : {state_type.__class__.__name__}")
+		# note: may return None if not found
+		for index, state in enumerate(self._state_stack):
+			if isinstance(state, state_type):
+				self._logger.debug(f"Found desired state : {state.__class__.__name__}")
+				if store_state is not None:
+					self._state_stack.append(store_state)
+				return self._state_stack.pop(index)
+
 	# note: do not add loggers here which may result in spamming of the logging capacity
 	def __handle_events__(self) -> None:
-		#should_switch = False
 		for event in game_lib.event.get():
 			if event.type == QUIT:
 				self._logger.debug(f"Quit event received, setting run to False")
@@ -86,16 +98,14 @@ class Environment:
 				self._logger.debug(f"Keydown event details : {event}")
 				self._logger.debug(f"Current state : {type(self._state)}")
 
-				'''
 				# commented block
 				r = self._state.handle_events(event=event)
-				if r == SwitchTo.GAME.value or r == SwitchTo.MENU.value:
-					should_switch = True
-				if should_switch:
-					self._logger.info("About to switch the current state")
-					self.update_cur_state()
-					should_switch = False
-				'''
+				if r == SwitchTo.GAME.value:
+					self._logger.info("Switching to GameState instance")
+					self.update_cur_state(state_type=GameState)
+				elif r == SwitchTo.MENU.value:
+					self._logger.info("Switching to MenuState instance")
+					self.update_cur_state(state_type=MenuState)
 
 	# fixme: add public functions as and when required
 	def listresolutions(self):
@@ -103,12 +113,12 @@ class Environment:
 		for resolution in game_lib.display.list_modes():
 			self._logger.debug(f"{resolution}")
 
-	def update_cur_state(self):
+	def update_cur_state(self, state_type):
 		self._logger.debug(f"Current state instance of (before stack push) : {type(self._state)}")
 		self._logger.debug(f"Before pushing back in stack : {self._state_stack}")
-		self._state_stack.append(self._state) # push at the back
+		self._state = self.__select_state__(state_type=state_type, store_state=self._state)
+		#self._state_stack.append(self._state) # push at the back
 		self._logger.debug(f"After pushing back in stack : {self._state_stack}")
-		self._state = self._state_stack.pop(0) # pop from the top
 		self._logger.debug(f"Current state instance of (after stack pop) : {type(self._state)}")
 
 	def mainloop(self) -> None:
