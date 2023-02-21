@@ -20,5 +20,5 @@ import pygame as game_lib
 from pygame.locals import * # fixme: write the names of the specific imports here
 
 # constants and enums
-from utility.constants import SwitchTo
+from utility.constants import SwitchTo, LoggingOptions
 

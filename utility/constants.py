@@ -11,6 +11,11 @@ LOGGER_DIR = f".{sep}logs{sep}"
 LOGGER_FILE = f".{sep}exec.log"
 LOGGER_FORMAT = '[%(levelname)-7s] - %(asctime)s - %(name)s {%(filename)s:%(funcName)s:%(lineno)d} - %(message)s'
 
+class LoggingOptions(Enum):
+	debug_with_console_io = 10 # enable logging in only console stream handler, default this one should be used
+	debug_with_file_io = 20	   # enable logging in only file stream handler, no console output of the logging lines
+	debug_with_all_io = 30	   # enable logging in both console as well as file stream handler
+
 class SwitchTo(Enum):
 	MENU=1
 	GAME=2

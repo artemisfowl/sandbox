@@ -16,16 +16,23 @@ from pygame.locals import QUIT
 from logging import getLogger, DEBUG
 
 from utility.log import log_setup
-from utility.constants import LOGGER_INSTANCE, SwitchTo
+from utility.constants import LOGGER_INSTANCE, SwitchTo, LoggingOptions
 
 class Environment:
-	def __init__(self, states: list, enable_debug=False) -> None:
+	def __init__(self, states: list, debugging_mode=None) -> None:
 		self.__run__ = True
 		self.__surface__ = None
-		self._logger = None
 
-		if enable_debug:
+		# fixme: test the debugging_mode code from the execute file
+		if debugging_mode == LoggingOptions.debug_with_console_io:
 			log_setup(log_level=DEBUG)
+		elif debugging_mode == LoggingOptions.debug_with_file_io:
+			log_setup(log_level=DEBUG, log_to_file=True, log_to_stdout=False)
+		elif debugging_mode == LoggingOptions.debug_with_all_io:
+			log_setup(log_level=DEBUG, log_to_file=True)
+		elif debugging_mode is None:
+			pass
+
 		self._logger = getLogger(LOGGER_INSTANCE)
 		self._logger.info("Initializing environment")
 
@@ -34,7 +41,7 @@ class Environment:
 			exit(-1)
 
 		self._state_stack = states if isinstance(states, list) else []
-		self._state = None
+		self._state = self.__select_state__(state_type=MenuState)
 
 	# basic context handler function
 	def __enter__(self):
@@ -48,7 +55,6 @@ class Environment:
 		self._logger.debug(f"Setting window caption to : Game Window Test")
 
 		self._logger.info("Setting the state initially to MenuState instance")
-		self._state = self.__select_state__(state_type=MenuState)
 
 		self._logger.debug("Returning a reference to object")
 		return self
@@ -98,7 +104,7 @@ class Environment:
 				self._logger.debug(f"Keydown event details : {event}")
 				self._logger.debug(f"Current state : {type(self._state)}")
 
-				r = self._state.handle_events(event=event)
+				r = self._state.handle_events(event=event) # type: ignore
 				if r == SwitchTo.GAME.value:
 					self._logger.info("Switching to GameState instance")
 					self.update_cur_state(state_type=GameState)

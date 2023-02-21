@@ -23,7 +23,6 @@ def log_setup(logger_module_name: str=LOGGER_INSTANCE, log_to_file: bool=False,
 
 	# enable handlers based on the flags
 	if log_to_file:
-		# fixme: create the logger directory and file if the path does not exist
 		if not fsystem_create_dir(LOGGER_DIR):
 			print("Something went wrong while trying to create the directory for log files")
 
