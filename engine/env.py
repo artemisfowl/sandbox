@@ -43,6 +43,9 @@ class Environment:
 		self._state_stack = states if isinstance(states, list) else []
 		self._state = self.__select_state__(state_type=MenuState)
 
+		# fps clock
+		self._fps_clock = game_lib.time.Clock()
+
 	# basic context handler function
 	def __enter__(self):
 		self._logger.info("Initializing game library modules")
@@ -81,6 +84,7 @@ class Environment:
 	# note: do not add loggers here which may result in spamming of the logging capacity
 	def __update__(self):
 		game_lib.display.update()
+		self._fps_clock.tick(30)
 
 	def __select_state__(self, state_type, store_state=None):
 		self._logger.info("About to search for state of the desired type")
@@ -122,7 +126,6 @@ class Environment:
 		self._logger.debug(f"Current state instance of (before stack push) : {type(self._state)}")
 		self._logger.debug(f"Before pushing back in stack : {self._state_stack}")
 		self._state = self.__select_state__(state_type=state_type, store_state=self._state)
-		#self._state_stack.append(self._state) # push at the back
 		self._logger.debug(f"After pushing back in stack : {self._state_stack}")
 		self._logger.debug(f"Current state instance of (after stack pop) : {type(self._state)}")
 
