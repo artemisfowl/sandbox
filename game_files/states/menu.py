@@ -23,6 +23,8 @@ class GameMenuState(MenuState):
 		self._options = {option.name: option.value for option in GameMenuOptions}
 
 		self._logger.info("Initialised GameMenuState")
+
+	def get_menu_options(self):
 		self._logger.debug(f"Populated options : {self._options}")
 
 	# note: do not add logger lines here which will spam the logger

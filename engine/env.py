@@ -31,7 +31,7 @@ class Environment:
 		elif debugging_mode == LoggingOptions.debug_with_all_io:
 			log_setup(log_level=DEBUG, log_to_file=True)
 		elif debugging_mode is None:
-			pass
+			pass # ignore and move on
 
 		self._logger = getLogger(LOGGER_INSTANCE)
 		self._logger.info("Initializing environment")
