@@ -83,6 +83,7 @@ class Environment:
 
 	# note: do not add loggers here which may result in spamming of the logging capacity
 	def __update__(self):
+		# fixme: add code from the state to update the display surface
 		game_lib.display.update()
 		self._fps_clock.tick(30)
 

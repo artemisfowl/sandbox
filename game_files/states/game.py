@@ -11,7 +11,12 @@ class GamePlayState(GameState):
 	def __init__(self) -> None:
 		super().__init__()
 		self._logger = logger
+		self._surface = None
 		self._logger.info("Enabled GamePlayState")
+
+	def set_surface(self, surface):
+		if surface is not None:
+			self._surface = surface
 
 	# note: do not add logger lines here which will spam the logger
 	# fixme: return proper int value in order to switch game state
@@ -21,3 +26,10 @@ class GamePlayState(GameState):
 			self._logger.info("Escape key pressed, moving to menu state")
 			return SwitchTo.MENU.value
 		return 0
+
+	def update(self):
+		# fixme: add necessary code in this function
+		if self._surface is None:
+			return
+
+		self._logger.info("Inside the GamePlayState update function")

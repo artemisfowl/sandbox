@@ -21,11 +21,24 @@ class GameMenuState(MenuState):
 		super().__init__()
 		self._logger = logger
 		self._options = {option.name: option.value for option in GameMenuOptions}
+		self._surface = None # this is the display surface which will be updated
 
 		self._logger.info("Initialised GameMenuState")
 
+	def set_surface(self, surface):
+		if surface is not None:
+			self._surface = surface
+
 	def get_menu_options(self):
+		# fixme: add code for getting the list of options to be shown in the menu screen
 		self._logger.debug(f"Populated options : {self._options}")
+
+	def update(self):
+		if self._surface is None:
+			return
+
+		self._logger.info("Inside the GameMenuState update function")
+		self.get_menu_options()
 
 	# note: do not add logger lines here which will spam the logger
 	def handle_events(self, event) -> int:

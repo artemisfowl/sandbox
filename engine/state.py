@@ -18,11 +18,19 @@ class GameState(State):
 	def handle_events(self, event):
 		pass
 
+	@abstractmethod
+	def update(self):
+		pass
+
 class MenuState(State):
 	def __init__(self) -> None:
 		super().__init__()
 
 	@abstractmethod
 	def handle_events(self, event):
+		pass
+
+	@abstractmethod
+	def update(self):
 		pass
 
