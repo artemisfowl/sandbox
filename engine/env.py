@@ -20,8 +20,9 @@ from utility.constants import LOGGER_INSTANCE, SwitchTo, LoggingOptions
 
 class Environment:
 	def __init__(self, states: list, debugging_mode=None) -> None:
+		game_lib.init()
 		self.__run__ = True
-		self.__surface__ = None
+		self.__surface__ = game_lib.display.set_mode((600, 400))
 
 		# fixme: test the debugging_mode code from the execute file
 		if debugging_mode == LoggingOptions.debug_with_console_io:
@@ -48,10 +49,6 @@ class Environment:
 
 	# basic context handler function
 	def __enter__(self):
-		self._logger.info("Initializing game library modules")
-		game_lib.init()
-		self._logger.info("Setting the resolution")
-		self.__surface__ = game_lib.display.set_mode((600, 400))
 		self._logger.debug(f"Display surface resolution set to :"
 					 f"{self.__surface__.get_width()}x{self.__surface__.get_height()}")
 		game_lib.display.set_caption("Game Window Test")
@@ -96,7 +93,11 @@ class Environment:
 				self._logger.debug(f"Found desired state : {state.__class__.__name__}")
 				if store_state is not None:
 					self._state_stack.append(store_state)
-				return self._state_stack.pop(index)
+				r = self._state_stack.pop(index)
+				r.set_surface(surface=self.__surface__)
+				return r
+
+		self._state.set_surface(surface=self.__surface__)
 
 	# note: do not add loggers here which may result in spamming of the logging capacity
 	def __handle_events__(self) -> None:
@@ -136,4 +137,5 @@ class Environment:
 		# note: do not add loggers here which may result in spamming of the logging capacity
 		while self.__run__:
 			self.__handle_events__()
+			self._state.update()
 			self.__update__()

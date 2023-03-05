@@ -35,6 +35,7 @@ class GameMenuState(MenuState):
 
 	def update(self):
 		if self._surface is None:
+			self._logger.warning("Surface not set")
 			return
 
 		self._logger.info("Inside the GameMenuState update function")
