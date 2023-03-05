@@ -132,3 +132,4 @@ dmypy.json
 pyrightconfig.json
 tbed/
 logs/
+.DS_Store
