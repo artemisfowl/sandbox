@@ -29,6 +29,10 @@ class GameMenuState(MenuState):
 		if surface is not None:
 			self._surface = surface
 
+	def show_options(self):
+		if self._surface is None:
+			return
+
 	def get_menu_options(self):
 		# fixme: add code for getting the list of options to be shown in the menu screen
 		self._logger.debug(f"Populated options : {self._options}")
@@ -38,7 +42,8 @@ class GameMenuState(MenuState):
 			self._logger.warning("Surface not set")
 			return
 
-		self._logger.info("Inside the GameMenuState update function")
+		self._surface.fill(game_lib.Color(0, 0, 0))
+		game_lib.display.update()
 		self.get_menu_options()
 
 	# note: do not add logger lines here which will spam the logger
