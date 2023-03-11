@@ -11,7 +11,6 @@ from states.menu import GameMenuState
 from states.game import GamePlayState
 
 def main() -> None:
-	print(engine.cli_args)
 	mode = None
 	if engine.cli_args["debug_with_console"]:
 		mode = engine.LoggingOptions.debug_with_console_io
