@@ -42,9 +42,9 @@ class GameMenuState(MenuState):
 			self._logger.warning("Surface not set")
 			return
 
-		self._surface.fill(game_lib.Color(0, 0, 0))
+		self._surface.fill(game_lib.Color(255, 255, 255))
 		game_lib.display.update()
-		self.get_menu_options()
+		self.get_menu_options() # fixme: this is spamming a lot of log lines, need to remove that
 
 	# note: do not add logger lines here which will spam the logger
 	def handle_events(self, event) -> int:

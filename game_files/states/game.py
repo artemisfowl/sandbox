@@ -17,6 +17,7 @@ class GamePlayState(GameState):
 	def set_surface(self, surface):
 		if surface is not None:
 			self._surface = surface
+			self._surface.fill(game_lib.Color(0, 0, 255))
 
 	# note: do not add logger lines here which will spam the logger
 	# fixme: return proper int value in order to switch game state
@@ -25,6 +26,14 @@ class GamePlayState(GameState):
 		if event.key == game_lib.K_ESCAPE:
 			self._logger.info("Escape key pressed, moving to menu state")
 			return SwitchTo.MENU.value
+		elif event.key == game_lib.K_UP:
+			self._logger.info("Up Arrow has been pressed")
+			if self._surface:
+				self._surface.fill(game_lib.Color(0, 128, 255))
+		elif event.key == game_lib.K_DOWN:
+			self._logger.info("Down arrow was pressed")
+			if self._surface:
+				self._surface.fill(game_lib.Color(127, 127, 0))
 		return 0
 
 	def update(self):
@@ -33,3 +42,4 @@ class GamePlayState(GameState):
 			return
 
 		self._logger.info("Inside the GamePlayState update function")
+		game_lib.display.update()

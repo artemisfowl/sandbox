@@ -20,8 +20,7 @@ def main() -> None:
 		mode = engine.LoggingOptions.debug_with_all_io
 
 	# now create the environment with the right mode
-	with engine.Environment(
-			states=[GameMenuState(), GamePlayState()], debugging_mode=mode) as environment:
+	with engine.Environment(states=[GameMenuState(), GamePlayState()], debugging_mode=mode) as environment:
 		environment.mainloop()
 
 if __name__ == "__main__":
