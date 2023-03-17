@@ -16,7 +16,8 @@ from pygame.locals import QUIT
 from logging import getLogger, DEBUG
 
 from utility.log import log_setup
-from utility.constants import LOGGER_INSTANCE, SwitchTo, LoggingOptions
+from utility.constants import LOGGER_INSTANCE, SwitchTo, LoggingOptions, GAME_FPS
+from utility.constants import FPS_TEXT_COLOR_PRIMARY, FPS_TEXT_COLOR_ALTERNA
 
 class Environment:
 	def __init__(self, states: list, debugging_mode=None) -> None:
@@ -46,6 +47,13 @@ class Environment:
 
 		# fps clock
 		self._fps_clock = game_lib.time.Clock()
+
+		# display debug font - this also might be required to be set in the states
+		self._font = game_lib.font.SysFont("Verdana", 10) # fixme: add a constant for the font size as well
+		if isinstance(self._state, MenuState):
+			self._font.render(str(self._fps_clock.get_fps()), True, FPS_TEXT_COLOR_ALTERNA)
+		elif isinstance(self._state, GameState):
+			self._font.render(str(self._fps_clock.get_fps()), True, FPS_TEXT_COLOR_PRIMARY)
 
 	# basic context handler function
 	def __enter__(self):
@@ -82,7 +90,7 @@ class Environment:
 	def __update__(self):
 		# fixme: add code from the state to update the display surface
 		game_lib.display.update()
-		self._fps_clock.tick(30)
+		self._fps_clock.tick(GAME_FPS)
 
 	def __select_state__(self, state_type, store_state=None):
 		self._logger.info("About to search for state of the desired type")
