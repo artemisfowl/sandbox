@@ -17,7 +17,6 @@ from logging import getLogger, DEBUG
 
 from utility.log import log_setup
 from utility.constants import LOGGER_INSTANCE, SwitchTo, LoggingOptions, GAME_FPS
-from utility.constants import FPS_TEXT_COLOR_PRIMARY, FPS_TEXT_COLOR_ALTERNA
 
 class Environment:
 	def __init__(self, states: list, debugging_mode=None) -> None:
@@ -42,18 +41,11 @@ class Environment:
 			self._logger.error("Menu and Game states are not provided, exiting run")
 			exit(-1)
 
-		self._state_stack = states if isinstance(states, list) else []
-		self._state = self.__select_state__(state_type=MenuState)
-
 		# fps clock
 		self._fps_clock = game_lib.time.Clock()
 
-		# display debug font - this also might be required to be set in the states
-		self._font = game_lib.font.SysFont("Verdana", 10) # fixme: add a constant for the font size as well
-		if isinstance(self._state, MenuState):
-			self._font.render(str(self._fps_clock.get_fps()), True, FPS_TEXT_COLOR_ALTERNA)
-		elif isinstance(self._state, GameState):
-			self._font.render(str(self._fps_clock.get_fps()), True, FPS_TEXT_COLOR_PRIMARY)
+		self._state_stack = states if isinstance(states, list) else []
+		self._state = self.__select_state__(state_type=MenuState)
 
 	# basic context handler function
 	def __enter__(self):
@@ -103,9 +95,11 @@ class Environment:
 					self._state_stack.append(store_state)
 				r = self._state_stack.pop(index)
 				r.set_surface(surface=self.__surface__)
+				r.set_clock(clock=self._fps_clock) # fixme: this portion is complaining about no self._fps_clock
 				return r
 
 		self._state.set_surface(surface=self.__surface__)
+		self._state.set_clock(clock=self._fps_clock)
 
 	# note: do not add loggers here which may result in spamming of the logging capacity
 	def __handle_events__(self) -> None:

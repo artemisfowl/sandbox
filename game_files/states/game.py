@@ -14,10 +14,16 @@ class GamePlayState(GameState):
 		self._surface = None
 		self._logger.info("Enabled GamePlayState")
 
+		self._clock = None
+
 	def set_surface(self, surface):
 		if surface is not None:
 			self._surface = surface
 			self._surface.fill(game_lib.Color(0, 0, 255))
+
+	def set_clock(self, clock):
+		if clock is not None:
+			self._clock = clock
 
 	# note: do not add logger lines here which will spam the logger
 	# fixme: return proper int value in order to switch game state

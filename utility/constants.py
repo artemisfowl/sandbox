@@ -15,6 +15,8 @@ GAME_FPS = 60
 FPS_TEXT_COLOR_PRIMARY = (255, 255, 255) # this will be for light background colors
 FPS_TEXT_COLOR_ALTERNA = (0, 0, 0) # this will be for the dark background colors
 
+DEBUG_TEXT_SIZE = 12
+
 class LoggingOptions(Enum):
 	debug_with_console_io = 10 # enable logging in only console stream handler, default this one should be used
 	debug_with_file_io = 20	   # enable logging in only file stream handler, no console output of the logging lines

@@ -9,6 +9,9 @@ from abc import abstractmethod
 class State:
 	def __init__(self) -> None:
 		self._options = None
+		self._font = None
+		self._font_surface = None
+		self._clock = None
 
 class GameState(State):
 	def __init__(self) -> None:
