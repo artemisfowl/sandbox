@@ -76,7 +76,7 @@ class GameMenuState(MenuState):
 			self._logger.info("Enter/return key pressed, moving to game play state")
 			return SwitchTo.GAME.value
 		elif event.key == game_lib.K_F10:
-			self._logger.info("F11 key pressed, showing the fps")
+			self._logger.info("F10 key pressed, showing the fps")
 			self._logger.debug(f"Show FPS : {self._show_fps}")
 			self._show_fps = not self._show_fps
 		return 0

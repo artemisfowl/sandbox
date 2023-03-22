@@ -61,7 +61,6 @@ class GamePlayState(GameState):
 		return 0
 
 	def update(self):
-		# fixme: add necessary code in this function
 		if self._surface is None:
 			return
 
