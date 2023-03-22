@@ -13,6 +13,7 @@ class GamePlayState(GameState):
 		self._logger = logger
 		self._surface = None
 		self._logger.info("Enabled GamePlayState")
+		self._screen_color = game_lib.Color(0, 0, 255)
 
 		# clock used for the fps
 		self._clock = None
@@ -25,7 +26,7 @@ class GamePlayState(GameState):
 	def set_surface(self, surface):
 		if surface is not None:
 			self._surface = surface
-			self._surface.fill(game_lib.Color(0, 0, 255))
+			self._surface.fill(self._screen_color)
 
 	def set_clock(self, clock):
 		if clock is not None:
@@ -49,12 +50,10 @@ class GamePlayState(GameState):
 			return SwitchTo.MENU.value
 		elif event.key == game_lib.K_UP:
 			self._logger.info("Up Arrow has been pressed")
-			if self._surface:
-				self._surface.fill(game_lib.Color(0, 128, 255))
+			self._screen_color = game_lib.Color(0, 128, 255)
 		elif event.key == game_lib.K_DOWN:
 			self._logger.info("Down arrow was pressed")
-			if self._surface:
-				self._surface.fill(game_lib.Color(127, 127, 0))
+			self._screen_color = game_lib.Color(127, 127, 0)
 		elif event.key == game_lib.K_F10:
 			self._logger.info("F10 key pressed, showing fps")
 			self._logger.debug(f"Show FPS flag : {self._show_fps}")
@@ -66,7 +65,7 @@ class GamePlayState(GameState):
 		if self._surface is None:
 			return
 
-		self._surface.fill(game_lib.Color(0, 0, 255))
+		self._surface.fill(self._screen_color)
 		if self._show_fps:
 			self.show_fps()
 		game_lib.display.update()
