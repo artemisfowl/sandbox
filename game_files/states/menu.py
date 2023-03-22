@@ -25,7 +25,7 @@ class GameMenuState(MenuState):
 		self._surface = None # this is the display surface which will be updated
 
 		game_lib.font.init()
-		self._font = game_lib.font.Font("freesansbold.ttf", DEBUG_TEXT_SIZE)
+		self._font = game_lib.font.Font(game_lib.font.get_default_font(), DEBUG_TEXT_SIZE)
 		self._show_fps = False
 
 		self._logger.info("Initialised GameMenuState")
