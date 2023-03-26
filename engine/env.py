@@ -119,6 +119,8 @@ class Environment:
 				elif r == SwitchTo.MENU.value:
 					self._logger.info("Switching to MenuState instance")
 					self.update_cur_state(state_type=MenuState)
+				elif r == 1005:
+					self.__run__ = False
 
 	# fixme: add public functions as and when required
 	def listresolutions(self):

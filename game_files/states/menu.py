@@ -79,4 +79,6 @@ class GameMenuState(MenuState):
 			self._logger.info("F10 key pressed, showing the fps")
 			self._logger.debug(f"Show FPS : {self._show_fps}")
 			self._show_fps = not self._show_fps
+		elif event.key == game_lib.K_ESCAPE:
+			return 1005
 		return 0
