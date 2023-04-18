@@ -48,6 +48,7 @@ class GameMenuState(MenuState):
 
 	def show_debug(self, message: str):
 		# fixme: Add the code for showing debug related information in the screen itself
+		# fixme: Add the code for showing more debug related information
 		self._logger.debug(f"Message to be printed : {message}")
 
 	def show_fps(self):
